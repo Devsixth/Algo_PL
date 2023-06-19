@@ -40,8 +40,11 @@ def start_app():
     def add_plot():
         counts = df['Result'].value_counts()
         fig = plt.figure(figsize=(4, 4))
+        colors = {'Loss': 'red',
+                  'Profit': 'green'
+                  }
         plt.pie(counts.values, labels=counts.index, autopct=autopct_format(counts), textprops={'fontsize': 10},
-                colors=['red', 'green'])
+                colors=[colors[key] for key in counts.index])
 
         st.pyplot(fig)
 
