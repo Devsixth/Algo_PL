@@ -11,15 +11,15 @@ def start_app():
     algo_filter = df['AlgoName'] == algo_name
     df = df[algo_filter].copy()
     start_date = al2.date_sidebar("Start date", 2023, 1, 1)
-    end_date = al2.date_sidebar("End date", 2023, 5, 31)
+    end_date = al2.date_sidebar("End date", 2023, 6, 20)
     col1, col2, col3=st.columns(3)
     with col1:
         Signal = al2.algo_sidebar1(df, "Signal", "Select Signal")
     with col2:
         Time = al2.algo_sidebar1(df, "Time", "Select Entry Time")
     with col3:
-        PL = df['Gross_PL'].unique().tolist()
-        df_grosspl = al2.add_slider('select range of Gross_pl',
+        PL = df['Rate'].unique().tolist()
+        df_rate = al2.add_slider('select range of Rate',
                                     min(PL, default=0),
                                     max(PL, default=0),
                                     (min(PL, default=0), max(PL, default=0)))
@@ -72,7 +72,7 @@ def start_app():
     def button():
         csv = convert_df(t)
         st.download_button(
-            label="Data",
+            label="Download Data",
             data=csv,
             file_name='PL_count.csv',
             mime='text/csv',
@@ -81,7 +81,7 @@ def start_app():
     def button1():
         csv = convert_df(t)
         st.download_button(
-            label="Data",
+            label="Download Data",
             data=csv,
             file_name='Closure_count.csv',
             mime='text/csv',
@@ -90,7 +90,7 @@ def start_app():
     def button2():
         csv = convert_df(t)
         st.download_button(
-            label="Data",
+            label="Download Data",
             data=csv,
             file_name='Gross_PL.csv',
             mime='text/csv',
@@ -115,7 +115,7 @@ def start_app():
                     unsafe_allow_html=True)
 
         filter = (df['AlgoName'] == algo_name) & (df['Signal'].isin(Signal)) & (df['Time'].isin(Time)) & (
-            df['Gross_PL'].between(*df_grosspl))
+            df['Rate'].between(*df_rate))
         df = df[filter]
         col1, col2 = st.columns(2)
         with col1:
@@ -141,7 +141,7 @@ def start_app():
     elif algo_name and Signal:
         st.markdown("<h6 style='text-align: left; color: Black;'>Profit Loss Count based on Signal</h6>",
                     unsafe_allow_html=True)
-        filter = (df['AlgoName'] == algo_name) & (df['Signal'].isin(Signal)) & (df['Gross_PL'].between(*df_grosspl))
+        filter = (df['AlgoName'] == algo_name) & (df['Signal'].isin(Signal)) & (df['Rate'].between(*df_rate))
         df = df[filter]
         col1, col2 = st.columns(2)
         with col1:
@@ -169,7 +169,7 @@ def start_app():
         st.markdown("<h6 style='text-align: left; color: Black;'>Profit Loss Count based on Time</h6>",
                     unsafe_allow_html=True)
         col1, col2 = st.columns(2)
-        filter = (df['AlgoName'] == algo_name) & (df['Time'].isin(Time)) & (df['Gross_PL'].between(*df_grosspl))
+        filter = (df['AlgoName'] == algo_name) & (df['Time'].isin(Time)) & (df['Rate'].between(*df_rate))
         df = df[filter]
         with col1:
             add_plot()
@@ -193,7 +193,7 @@ def start_app():
         st.markdown("<h6 style='text-align: left; color: Black;'>Profit Loss Count</h6>",
                     unsafe_allow_html=True)
         col1, col2 = st.columns(2)
-        filter = (df['AlgoName'] == algo_name)
+        filter = (df['AlgoName'] == algo_name) & (df['Rate'].between(*df_rate))
         df = df[filter]
         with col1:
             #st.title("Profit Loss Count")
@@ -212,7 +212,7 @@ def start_app():
         plot_pl()
         t = df.groupby(['Date'])[['P_Amount', 'L_Amount', 'Gross_PL']].agg(
             {'P_Amount': ['sum'], 'L_Amount': ['sum'], 'Gross_PL': ['count', 'sum']})
-        # dataframe()
+        #dataframe()
         button2()
 
 
