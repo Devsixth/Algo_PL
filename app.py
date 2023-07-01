@@ -11,7 +11,7 @@ def start_app():
     algo_filter = df['AlgoName'] == algo_name
     df = df[algo_filter].copy()
     start_date = al2.date_sidebar("Start date", 2023, 1, 1)
-    end_date = al2.date_sidebar("End date", 2023, 6, 20)
+    end_date = al2.date_sidebar("End date", 2023, 6, 30)
     col1, col2, col3=st.columns(3)
     with col1:
         Signal = al2.algo_sidebar1(df, "Signal", "Select Signal")
